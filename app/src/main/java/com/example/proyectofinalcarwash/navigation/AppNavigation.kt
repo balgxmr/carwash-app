@@ -12,11 +12,8 @@ import com.example.proyectofinalcarwash.screens.ServicesScreen
 import com.example.proyectofinalcarwash.screens.AppointmentScreen
 import com.example.proyectofinalcarwash.screens.Servicio
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import com.example.proyectofinalcarwash.screens.CalendarScreen
 import com.example.proyectofinalcarwash.ui.components.MainLayout
 
