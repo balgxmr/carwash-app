@@ -27,7 +27,8 @@ fun AppNavigation() {
         composable("register") {
             RegisterScreen(
                 onLoginClick = { _, _ -> },
-                onRegisterClick = {
+                onRegisterClick = { username, password ->
+                    // Aquí sería lo que quieras con los datos, por ahora solo regresa:
                     navController.popBackStack()
                 }
             )

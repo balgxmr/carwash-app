@@ -15,18 +15,22 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.painterResource
 import com.example.proyectofinalcarwash.R
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.ui.text.input.VisualTransformation
 
 @Composable
 fun RegisterScreen(
     modifier: Modifier = Modifier,
     onLoginClick: (String, String) -> Unit,
-    onRegisterClick: () -> Unit
+    onRegisterClick: (String, String) -> Unit
 ) {
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
-    //val passwordVisible = remember { mutableStateOf(false) }
     val confirmPassword = remember { mutableStateOf("") }
-    //val confirmPasswordVisible = remember { mutableStateOf(false) }
+    val passwordVisible = remember { mutableStateOf(false) }
+    val confirmPasswordVisible = remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
@@ -68,17 +72,24 @@ fun RegisterScreen(
                 onValueChange = { password.value = it },
                 label = { Text("Contraseña") },
                 singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
+                visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
                 keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Done,
+                    imeAction = ImeAction.Next,
                     keyboardType = KeyboardType.Password
                 ),
                 keyboardActions = KeyboardActions(onDone = {
                     focusManager.clearFocus()
-                })
+                }),
+                trailingIcon = {
+                    val icon = if (passwordVisible.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                    val desc = if (passwordVisible.value) "Ocultar contraseña" else "Mostrar contraseña"
+                    IconButton(onClick = { passwordVisible.value = !passwordVisible.value }) {
+                        Icon(imageVector = icon, contentDescription = desc)
+                    }
+                }
             )
 
             OutlinedTextField(
@@ -86,7 +97,7 @@ fun RegisterScreen(
                 onValueChange = { confirmPassword.value = it },
                 label = { Text("Confirmar contraseña") },
                 singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
+                visualTransformation = if (confirmPasswordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
@@ -96,12 +107,19 @@ fun RegisterScreen(
                 ),
                 keyboardActions = KeyboardActions(onDone = {
                     focusManager.clearFocus()
-                })
+                }),
+                trailingIcon = {
+                    val icon = if (confirmPasswordVisible.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                    val desc = if (confirmPasswordVisible.value) "Ocultar contraseña" else "Mostrar contraseña"
+                    IconButton(onClick = { confirmPasswordVisible.value = !confirmPasswordVisible.value }) {
+                        Icon(imageVector = icon, contentDescription = desc)
+                    }
+                }
             )
 
             Button(
                 onClick = {
-                    onLoginClick(username.value, password.value)
+                    onRegisterClick(username.value, password.value)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -110,9 +128,7 @@ fun RegisterScreen(
                 Text("Registrarme")
             }
 
-            TextButton(
-                onClick = { onRegisterClick() },
-            ) {
+            TextButton(onClick = { onLoginClick(username.value, password.value) }) {
                 Text("Tengo una cuenta")
             }
         }
