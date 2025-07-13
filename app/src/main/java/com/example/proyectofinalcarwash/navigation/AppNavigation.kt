@@ -4,17 +4,18 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.proyectofinalcarwash.ui.splash.SplashScreen
 import com.example.proyectofinalcarwash.authScreens.LoginScreen
 import com.example.proyectofinalcarwash.authScreens.RegisterScreen
 import com.example.proyectofinalcarwash.home.HomeScreen
-import com.example.proyectofinalcarwash.ui.splash.SplashScreen
 import com.example.proyectofinalcarwash.screens.ServicesScreen
 import com.example.proyectofinalcarwash.screens.AppointmentScreen
 import com.example.proyectofinalcarwash.screens.Servicio
+import com.example.proyectofinalcarwash.screens.CalendarScreen
+import com.example.proyectofinalcarwash.screens.ProfileScreen
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.proyectofinalcarwash.screens.CalendarScreen
 import com.example.proyectofinalcarwash.ui.components.MainLayout
 
 @Composable
@@ -80,6 +81,15 @@ fun AppNavigation() {
             val currentDestination = navController.currentBackStackEntryAsState().value?.destination
             MainLayout(navController, currentDestination) { innerPadding ->
                 CalendarScreen() // sin navController aquí
+            }
+        }
+        composable("profile") {
+            val currentDestination = navController.currentBackStackEntryAsState().value?.destination
+            MainLayout(navController, currentDestination) { innerPadding ->
+                ProfileScreen(
+                    modifier = Modifier.padding(innerPadding),
+                    navController = navController
+                )
             }
         }
     }
