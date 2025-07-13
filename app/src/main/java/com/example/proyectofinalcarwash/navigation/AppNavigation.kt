@@ -5,8 +5,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.proyectofinalcarwash.ui.splash.SplashScreen
-import com.example.proyectofinalcarwash.authScreens.LoginScreen
-import com.example.proyectofinalcarwash.authScreens.RegisterScreen
+import com.example.proyectofinalcarwash.pages.authScreens.LoginScreen
+import com.example.proyectofinalcarwash.pages.authScreens.RegisterScreen
 import com.example.proyectofinalcarwash.home.HomeScreen
 import com.example.proyectofinalcarwash.screens.ServicesScreen
 import com.example.proyectofinalcarwash.screens.AppointmentScreen
@@ -28,7 +28,8 @@ fun AppNavigation() {
         }
         composable("login") {
             LoginScreen(
-                onLoginClick = { _, _ ->
+                onLoginClick = { username, password ->
+                    // Aquí podrías validar credenciales y navegar a Home si es exitoso
                     navController.navigate("home")
                 },
                 onRegisterClick = {
@@ -38,10 +39,11 @@ fun AppNavigation() {
         }
         composable("register") {
             RegisterScreen(
-                onLoginClick = { _, _ -> },
-                onRegisterClick = { username, password ->
-                    // Aquí sería lo que quieras con los datos, por ahora solo regresa:
-                    navController.popBackStack()
+                onNavigateToLogin = {
+                    navController.popBackStack() // vuelve al login
+                },
+                onSuccessRegister = {
+                    navController.navigate("home") // o como prefieras
                 }
             )
         }

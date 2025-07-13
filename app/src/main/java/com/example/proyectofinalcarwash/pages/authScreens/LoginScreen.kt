@@ -1,8 +1,11 @@
-package com.example.proyectofinalcarwash.authScreens
+package com.example.proyectofinalcarwash.pages.authScreens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,23 +17,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.painterResource
-import com.example.proyectofinalcarwash.R
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.ui.text.input.VisualTransformation
+import com.example.proyectofinalcarwash.R
 
 @Composable
-fun RegisterScreen(
+fun LoginScreen(
     modifier: Modifier = Modifier,
     onLoginClick: (String, String) -> Unit,
-    onRegisterClick: (String, String) -> Unit
+    onRegisterClick: () -> Unit
 ) {
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
-    val confirmPassword = remember { mutableStateOf("") }
     val passwordVisible = remember { mutableStateOf(false) }
-    val confirmPasswordVisible = remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
@@ -92,44 +90,21 @@ fun RegisterScreen(
                 }
             )
 
-            OutlinedTextField(
-                value = confirmPassword.value,
-                onValueChange = { confirmPassword.value = it },
-                label = { Text("Confirmar contraseña") },
-                singleLine = true,
-                visualTransformation = if (confirmPasswordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Done,
-                    keyboardType = KeyboardType.Password
-                ),
-                keyboardActions = KeyboardActions(onDone = {
-                    focusManager.clearFocus()
-                }),
-                trailingIcon = {
-                    val icon = if (confirmPasswordVisible.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                    val desc = if (confirmPasswordVisible.value) "Ocultar contraseña" else "Mostrar contraseña"
-                    IconButton(onClick = { confirmPasswordVisible.value = !confirmPasswordVisible.value }) {
-                        Icon(imageVector = icon, contentDescription = desc)
-                    }
-                }
-            )
-
             Button(
                 onClick = {
-                    onRegisterClick(username.value, password.value)
+                    onLoginClick(username.value, password.value)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 16.dp)
             ) {
-                Text("Registrarme")
+                Text("Iniciar Sesión")
             }
 
-            TextButton(onClick = { onLoginClick(username.value, password.value) }) {
-                Text("Tengo una cuenta")
+            TextButton(
+                onClick = { onRegisterClick() },
+            ) {
+                Text("¿No tienes cuenta? Registrarse")
             }
         }
     }
