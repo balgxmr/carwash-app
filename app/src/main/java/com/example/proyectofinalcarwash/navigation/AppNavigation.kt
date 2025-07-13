@@ -8,6 +8,8 @@ import com.example.proyectofinalcarwash.authScreens.LoginScreen
 import com.example.proyectofinalcarwash.authScreens.RegisterScreen
 import com.example.proyectofinalcarwash.home.HomeScreen
 import com.example.proyectofinalcarwash.ui.splash.SplashScreen
+import com.example.proyectofinalcarwash.screens.ServicesScreen
+import com.example.proyectofinalcarwash.screens.Servicio
 
 @Composable
 fun AppNavigation() {
@@ -28,13 +30,7 @@ fun AppNavigation() {
             )
         }
         composable("home") {
-            HomeScreen(
-                // se coloca temporalmente lambdas vacíos
-                onAgendarCita = {},
-                onMisVehiculos = {},
-                onVerServicios = {},
-                onHistorialCitas = {}
-            )
+            HomeScreen(navController = navController)
         }
         composable("register") {
             RegisterScreen(
@@ -44,6 +40,15 @@ fun AppNavigation() {
                     navController.popBackStack()
                 }
             )
+        }
+        composable("services") {
+            // Lista dummy temporal
+            val serviciosDummy = listOf(
+                Servicio(1, "Lavado Básico", "Incluye lavado exterior con agua y jabón", 8.00),
+                Servicio(2, "Lavado Completo", "Exterior, interior, cera y aromatizante", 15.00),
+                Servicio(3, "Lavado Premium", "Lavado completo + tapicería y motor", 25.00)
+            )
+            ServicesScreen(servicios = serviciosDummy)
         }
     }
 }

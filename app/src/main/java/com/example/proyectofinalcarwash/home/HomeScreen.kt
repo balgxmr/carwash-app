@@ -11,31 +11,33 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyectofinalcarwash.home.HomeScreen
+import androidx.navigation.NavController
 
 @Composable
-fun HomeScreen(
-    onAgendarCita: () -> Unit,
-    onMisVehiculos: () -> Unit,
-    onVerServicios: () -> Unit,
-    onHistorialCitas: () -> Unit
-) {
+fun HomeScreen(navController: NavController) {
     var selectedItem by remember { mutableStateOf(0) }
 
     Scaffold(
         bottomBar = {
             NavigationBar {
                 val items = listOf(
-                    BottomNavItem("Inicio", Icons.Default.Home),
-                    BottomNavItem("Servicios", Icons.Default.Build),
-                    BottomNavItem("Perfil", Icons.Default.Person)
+                    BottomNavItem("Inicio", Icons.Default.Home, "home"),
+                    BottomNavItem("Servicios", Icons.Default.Build, "services"),
+                    BottomNavItem("Perfil", Icons.Default.Person, "profile") // Este puedes crear luego
                 )
-                items.forEachIndexed { index, item ->
-                    NavigationBarItem(
-                        icon = { Icon(item.icon, contentDescription = item.label) },
-                        label = { Text(item.label) },
-                        selected = selectedItem == index,
-                        onClick = { selectedItem = index }
-                    )
+
+                NavigationBar {
+                    items.forEachIndexed { index, item ->
+                        NavigationBarItem(
+                            icon = { Icon(item.icon, contentDescription = item.label) },
+                            label = { Text(item.label) },
+                            selected = selectedItem == index,
+                            onClick = {
+                                selectedItem = index
+                                navController.navigate(item.route)
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -74,22 +76,34 @@ fun HomeScreen(
             Text("Acciones rápidas", style = MaterialTheme.typography.titleMedium)
 
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Button(onClick = onAgendarCita, modifier = Modifier.fillMaxWidth()) {
+                Button(
+                    onClick = { navController.navigate("agendarCita") },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     Icon(Icons.Default.Add, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
                     Text("Agendar nueva cita")
                 }
-                Button(onClick = onMisVehiculos, modifier = Modifier.fillMaxWidth()) {
+                Button(
+                    onClick = { navController.navigate("vehiculos") },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     Icon(Icons.Default.DirectionsCar, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
                     Text("Mis vehículos")
                 }
-                Button(onClick = onVerServicios, modifier = Modifier.fillMaxWidth()) {
+                Button(
+                    onClick = { navController.navigate("services") },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     Icon(Icons.Default.Build, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
                     Text("Ver servicios")
                 }
-                Button(onClick = onHistorialCitas, modifier = Modifier.fillMaxWidth()) {
+                Button(
+                    onClick = { navController.navigate("historial") },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     Icon(Icons.Default.History, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
                     Text("Historial de citas")
@@ -99,4 +113,8 @@ fun HomeScreen(
     }
 }
 
-data class BottomNavItem(val label: String, val icon: ImageVector)
+data class BottomNavItem(
+    val label: String,
+    val icon: ImageVector,
+    val route: String
+)
