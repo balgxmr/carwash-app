@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -22,7 +21,7 @@ fun AppointmentScreen(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
-    // Datos de prueba (deberías obtenerlos desde ViewModel o repositorio en producción)
+    // Datos de prueba
     val servicios = listOf("Lavado completo", "Cambio de aceite", "Pulido de pintura")
     val vehiculos = listOf("Toyota Corolla", "Honda Civic", "Mazda 3")
 
@@ -33,26 +32,6 @@ fun AppointmentScreen(
 
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
-
-    val datePickerDialog = DatePickerDialog(
-        context,
-        { _, year, month, dayOfMonth ->
-            fecha = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth)
-        },
-        calendar.get(Calendar.YEAR),
-        calendar.get(Calendar.MONTH),
-        calendar.get(Calendar.DAY_OF_MONTH)
-    )
-
-    val timePickerDialog = TimePickerDialog(
-        context,
-        { _, hourOfDay, minute ->
-            hora = String.format("%02d:%02d", hourOfDay, minute)
-        },
-        calendar.get(Calendar.HOUR_OF_DAY),
-        calendar.get(Calendar.MINUTE),
-        true
-    )
 
     Scaffold(
         topBar = {
@@ -67,14 +46,14 @@ fun AppointmentScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
-            SimpleDropdownMenu(
+            ExposedDropdownMenu(
                 label = "Selecciona un vehículo",
                 options = vehiculos,
                 selectedOption = vehiculoSeleccionado,
                 onOptionSelected = { vehiculoSeleccionado = it }
             )
 
-            SimpleDropdownMenu(
+            ExposedDropdownMenu(
                 label = "Selecciona un servicio",
                 options = servicios,
                 selectedOption = servicioSeleccionado,
@@ -106,8 +85,9 @@ fun AppointmentScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SimpleDropdownMenu(
+fun ExposedDropdownMenu(
     label: String,
     options: List<String>,
     selectedOption: String?,
@@ -115,33 +95,38 @@ fun SimpleDropdownMenu(
 ) {
     var expanded by remember { mutableStateOf(false) }
 
-    OutlinedTextField(
-        value = selectedOption ?: "",
-        onValueChange = {},
-        label = { Text(label) },
-        readOnly = true,
-        enabled = true,
-        trailingIcon = {
-            Icon(Icons.Default.ArrowDropDown, contentDescription = null)
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { expanded = true }
-    )
-
-    DropdownMenu(
+    ExposedDropdownMenuBox(
         expanded = expanded,
-        onDismissRequest = { expanded = false },
+        onExpandedChange = { expanded = !expanded },
         modifier = Modifier.fillMaxWidth()
     ) {
-        options.forEach { option ->
-            DropdownMenuItem(
-                text = { Text(option) },
-                onClick = {
-                    onOptionSelected(option)
-                    expanded = false
-                }
-            )
+        OutlinedTextField(
+            value = selectedOption.orEmpty(),
+            onValueChange = { /* no-op */ },
+            readOnly = true,
+            label = { Text(label) },
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+            },
+            modifier = Modifier
+                .menuAnchor()
+                .fillMaxWidth()
+        )
+
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            options.forEach { option ->
+                DropdownMenuItem(
+                    text = { Text(option) },
+                    onClick = {
+                        onOptionSelected(option)
+                        expanded = false
+                    }
+                )
+            }
         }
     }
 }
@@ -160,7 +145,6 @@ fun DateSelector(
         onValueChange = {},
         label = { Text(label) },
         readOnly = true,
-        enabled = true,
         trailingIcon = { Icon(Icons.Default.CalendarToday, contentDescription = null) },
         modifier = Modifier
             .fillMaxWidth()
@@ -178,7 +162,6 @@ fun DateSelector(
     )
 }
 
-
 @Composable
 fun TimeSelector(
     label: String,
@@ -193,7 +176,6 @@ fun TimeSelector(
         onValueChange = {},
         label = { Text(label) },
         readOnly = true,
-        enabled = true,
         trailingIcon = { Icon(Icons.Default.AccessTime, contentDescription = null) },
         modifier = Modifier
             .fillMaxWidth()
