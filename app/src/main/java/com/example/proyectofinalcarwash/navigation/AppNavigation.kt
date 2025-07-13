@@ -1,32 +1,34 @@
 package com.example.proyectofinalcarwash.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.proyectofinalcarwash.login.LoginScreen
-import com.example.proyectofinalcarwash.register.RegisterScreen
+import com.example.proyectofinalcarwash.authScreens.LoginScreen
+import com.example.proyectofinalcarwash.authScreens.RegisterScreen
+import com.example.proyectofinalcarwash.ui.splash.SplashScreen
 
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "login") {
+    NavHost(navController = navController, startDestination = "splash") {
+        composable("splash") {
+            SplashScreen(navController)
+        }
         composable("login") {
             LoginScreen(
-                onLoginClick = { _, _ -> /* lógica de login */ },
+                onLoginClick = { _, _ -> },
                 onRegisterClick = {
                     navController.navigate("register")
                 }
             )
         }
-
         composable("register") {
             RegisterScreen(
-                onLoginClick = { _, _ -> /* lógica de registro */ },
+                onLoginClick = { _, _ -> },
                 onRegisterClick = {
-                    navController.popBackStack() // regresa a login
+                    navController.popBackStack()
                 }
             )
         }

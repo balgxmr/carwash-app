@@ -1,4 +1,4 @@
-package com.example.proyectofinalcarwash.login
+package com.example.proyectofinalcarwash.authScreens
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -14,13 +14,16 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LoginScreen(
+fun RegisterScreen(
     modifier: Modifier = Modifier,
     onLoginClick: (String, String) -> Unit,
     onRegisterClick: () -> Unit
 ) {
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+    //val passwordVisible = remember { mutableStateOf(false) }
+    val confirmPassword = remember { mutableStateOf("") }
+    //val confirmPasswordVisible = remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
@@ -37,7 +40,7 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "El Elevado",
+                text = "Legacy Carwash",
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(bottom = 32.dp)
             )
@@ -73,6 +76,24 @@ fun LoginScreen(
                 })
             )
 
+            OutlinedTextField(
+                value = confirmPassword.value,
+                onValueChange = { confirmPassword.value = it },
+                label = { Text("Confirmar contraseña") },
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Password
+                ),
+                keyboardActions = KeyboardActions(onDone = {
+                    focusManager.clearFocus()
+                })
+            )
+
             Button(
                 onClick = {
                     onLoginClick(username.value, password.value)
@@ -81,13 +102,13 @@ fun LoginScreen(
                     .fillMaxWidth()
                     .padding(vertical = 16.dp)
             ) {
-                Text("Iniciar Sesión")
+                Text("Registrarme")
             }
 
             TextButton(
                 onClick = { onRegisterClick() },
             ) {
-                Text("¿No tienes cuenta? Registrarse")
+                Text("Tengo una cuenta")
             }
         }
     }
