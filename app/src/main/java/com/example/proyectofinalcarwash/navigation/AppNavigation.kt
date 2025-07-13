@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.proyectofinalcarwash.authScreens.LoginScreen
 import com.example.proyectofinalcarwash.authScreens.RegisterScreen
+import com.example.proyectofinalcarwash.home.HomeScreen
 import com.example.proyectofinalcarwash.ui.splash.SplashScreen
 
 @Composable
@@ -18,10 +19,21 @@ fun AppNavigation() {
         }
         composable("login") {
             LoginScreen(
-                onLoginClick = { _, _ -> },
+                onLoginClick = { _, _ ->
+                    navController.navigate("home")
+                },
                 onRegisterClick = {
                     navController.navigate("register")
                 }
+            )
+        }
+        composable("home") {
+            HomeScreen(
+                // se coloca temporalmente lambdas vacíos
+                onAgendarCita = {},
+                onMisVehiculos = {},
+                onVerServicios = {},
+                onHistorialCitas = {}
             )
         }
         composable("register") {
