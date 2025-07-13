@@ -1,6 +1,5 @@
 package com.example.proyectofinalcarwash.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -11,14 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.proyectofinalcarwash.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,16 +54,15 @@ fun ProfileScreen(
             }
 
             Text("José Encalada", fontSize = 20.sp, fontWeight = FontWeight.Medium)
-            Text("jose@email.com", style = MaterialTheme.typography.bodyMedium)
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.CenterVertically
+            // Información de contacto
+            Column(
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+                horizontalAlignment = Alignment.Start
             ) {
-                ChipItem(icon = Icons.Default.Home, label = "Residencia", value = "Panamá")
-                ChipItem(icon = Icons.Default.Phone, label = "Teléfono", value = "+507 6000-1234")
+                InfoRow(icon = Icons.Default.Email, text = "jose@email.com")
+                InfoRow(icon = Icons.Default.Home, text = "Panamá")
+                InfoRow(icon = Icons.Default.Phone, text = "+507 6000-1234")
             }
 
             Divider()
@@ -93,14 +88,15 @@ fun ProfileScreen(
 }
 
 @Composable
-fun ChipItem(icon: ImageVector, label: String, value: String) {
-    AssistChip(
-        onClick = {},
-        label = { Text("$label: $value") },
-        leadingIcon = {
-            Icon(icon, contentDescription = null)
-        },
-    )
+fun InfoRow(icon: ImageVector, text: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Icon(icon, contentDescription = null)
+        Text(text, style = MaterialTheme.typography.bodyMedium)
+    }
 }
 
 @Composable
