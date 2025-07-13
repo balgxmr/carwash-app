@@ -140,12 +140,7 @@ fun DateSelector(
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
 
-    OutlinedTextField(
-        value = date,
-        onValueChange = {},
-        label = { Text(label) },
-        readOnly = true,
-        trailingIcon = { Icon(Icons.Default.CalendarToday, contentDescription = null) },
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
@@ -159,7 +154,17 @@ fun DateSelector(
                     calendar.get(Calendar.DAY_OF_MONTH)
                 ).show()
             }
-    )
+    ) {
+        OutlinedTextField(
+            value = date,
+            onValueChange = {},
+            label = { Text(label) },
+            readOnly = true,
+            enabled = false,
+            trailingIcon = { Icon(Icons.Default.CalendarToday, contentDescription = null) },
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
 
 @Composable
@@ -171,12 +176,7 @@ fun TimeSelector(
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
 
-    OutlinedTextField(
-        value = time,
-        onValueChange = {},
-        label = { Text(label) },
-        readOnly = true,
-        trailingIcon = { Icon(Icons.Default.AccessTime, contentDescription = null) },
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
@@ -190,5 +190,15 @@ fun TimeSelector(
                     true
                 ).show()
             }
-    )
+    ) {
+        OutlinedTextField(
+            value = time,
+            onValueChange = {},
+            label = { Text(label) },
+            readOnly = true,
+            enabled = false,
+            trailingIcon = { Icon(Icons.Default.AccessTime, contentDescription = null) },
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
