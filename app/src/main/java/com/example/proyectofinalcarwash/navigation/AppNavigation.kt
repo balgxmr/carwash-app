@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import com.example.proyectofinalcarwash.screens.CalendarScreen
 import com.example.proyectofinalcarwash.ui.components.MainLayout
 
 @Composable
@@ -76,6 +77,12 @@ fun AppNavigation() {
                     modifier = Modifier.padding(innerPadding),
                     navController = navController
                 )
+            }
+        }
+        composable("calendar") {
+            val currentDestination = navController.currentBackStackEntryAsState().value?.destination
+            MainLayout(navController, currentDestination) { innerPadding ->
+                CalendarScreen() // sin navController aquí
             }
         }
     }

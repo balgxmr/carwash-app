@@ -1,9 +1,7 @@
 package com.example.proyectofinalcarwash.ui.components
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -25,6 +23,7 @@ fun MainLayout(
     val bottomNavItems = listOf(
         BottomNavItem("Inicio", "home", Icons.Default.Home),
         BottomNavItem("Servicios", "services", Icons.Default.Build),
+        BottomNavItem("Calendario", "calendar", Icons.Default.CalendarToday),
         BottomNavItem("Perfil", "profile", Icons.Default.Person)
     )
 

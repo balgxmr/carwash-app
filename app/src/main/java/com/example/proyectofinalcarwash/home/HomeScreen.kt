@@ -12,6 +12,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyectofinalcarwash.home.HomeScreen
 import androidx.navigation.NavController
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 
 @Composable
 fun HomeScreen(
@@ -75,38 +78,46 @@ fun HomeScreen(
 
             Text("Acciones rápidas", style = MaterialTheme.typography.titleMedium)
 
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Button(
-                    onClick = { navController.navigate("agendarCita") },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Icon(Icons.Default.Add, contentDescription = null)
-                    Spacer(Modifier.width(8.dp))
-                    Text("Agendar nueva cita")
-                }
-                Button(
-                    onClick = { navController.navigate("vehiculos") },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Icon(Icons.Default.DirectionsCar, contentDescription = null)
-                    Spacer(Modifier.width(8.dp))
-                    Text("Mis vehículos")
-                }
-                Button(
-                    onClick = { navController.navigate("services") },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Icon(Icons.Default.Build, contentDescription = null)
-                    Spacer(Modifier.width(8.dp))
-                    Text("Ver servicios")
-                }
-                Button(
-                    onClick = { navController.navigate("historial") },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Icon(Icons.Default.History, contentDescription = null)
-                    Spacer(Modifier.width(8.dp))
-                    Text("Historial de citas")
+            // Nueva grilla de acciones rápidas estilo Speed Dial
+            val acciones = listOf(
+                Triple("Agendar cita", Icons.Default.Add, "agendarCita"),
+                Triple("Mis vehículos", Icons.Default.DirectionsCar, "vehiculos"),
+                Triple("Ver servicios", Icons.Default.Build, "services"),
+                Triple("Historial", Icons.Default.History, "historial")
+            )
+
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.fillMaxHeight()
+            ) {
+                items(acciones.size) { index ->
+                    val (titulo, icono, ruta) = acciones[index]
+                    Card(
+                        onClick = { navController.navigate(ruta) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f), // Cuadrado
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                icono,
+                                contentDescription = titulo,
+                                modifier = Modifier.size(40.dp),
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(titulo, style = MaterialTheme.typography.bodyMedium)
+                        }
+                    }
                 }
             }
         }
