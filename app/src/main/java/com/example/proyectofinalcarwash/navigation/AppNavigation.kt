@@ -9,6 +9,7 @@ import com.example.proyectofinalcarwash.authScreens.RegisterScreen
 import com.example.proyectofinalcarwash.home.HomeScreen
 import com.example.proyectofinalcarwash.ui.splash.SplashScreen
 import com.example.proyectofinalcarwash.screens.ServicesScreen
+import com.example.proyectofinalcarwash.screens.AppointmentScreen
 import com.example.proyectofinalcarwash.screens.Servicio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.getValue
@@ -65,6 +66,15 @@ fun AppNavigation() {
                         Servicio(2, "Pulido de pintura", "Mejora el brillo de la pintura y elimina rayones leves", 25.0),
                         Servicio(3, "Cambio de aceite", "Incluye cambio de aceite y filtro", 40.0)
                     )
+                )
+            }
+        }
+        composable("agendarCita") {
+            val currentDestination = navController.currentBackStackEntryAsState().value?.destination
+            MainLayout(navController, currentDestination) { innerPadding ->
+                AppointmentScreen(
+                    modifier = Modifier.padding(innerPadding),
+                    navController = navController
                 )
             }
         }
