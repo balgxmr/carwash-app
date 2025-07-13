@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.Alignment
 
 data class Servicio(
     val id: Int,
@@ -19,22 +20,23 @@ data class Servicio(
     val precio: Double
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ServicesScreen(
+    modifier: Modifier = Modifier,
     servicios: List<Servicio>
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Servicios disponibles") }
-            )
-        }
-    ) { paddingValues ->
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        Text(
+            text = "Servicios disponibles",
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.padding(vertical = 16.dp)
+        )
+
         LazyColumn(
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(servicios) { servicio ->
@@ -43,7 +45,7 @@ fun ServicesScreen(
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
-                        Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 imageVector = Icons.Default.CleaningServices,
                                 contentDescription = null,

@@ -10,6 +10,13 @@ import com.example.proyectofinalcarwash.home.HomeScreen
 import com.example.proyectofinalcarwash.ui.splash.SplashScreen
 import com.example.proyectofinalcarwash.screens.ServicesScreen
 import com.example.proyectofinalcarwash.screens.Servicio
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import com.example.proyectofinalcarwash.ui.components.MainLayout
 
 @Composable
 fun AppNavigation() {
@@ -29,9 +36,6 @@ fun AppNavigation() {
                 }
             )
         }
-        composable("home") {
-            HomeScreen(navController = navController)
-        }
         composable("register") {
             RegisterScreen(
                 onLoginClick = { _, _ -> },
@@ -41,14 +45,28 @@ fun AppNavigation() {
                 }
             )
         }
+        composable("home") {
+            val currentDestination = navController.currentBackStackEntryAsState().value?.destination
+            MainLayout(navController, currentDestination) { innerPadding ->
+                HomeScreen(
+                    modifier = Modifier.padding(innerPadding),
+                    navController = navController
+                )
+            }
+        }
         composable("services") {
-            // Lista dummy temporal
-            val serviciosDummy = listOf(
-                Servicio(1, "Lavado Básico", "Incluye lavado exterior con agua y jabón", 8.00),
-                Servicio(2, "Lavado Completo", "Exterior, interior, cera y aromatizante", 15.00),
-                Servicio(3, "Lavado Premium", "Lavado completo + tapicería y motor", 25.00)
-            )
-            ServicesScreen(servicios = serviciosDummy)
+            val currentDestination = navController.currentBackStackEntryAsState().value?.destination
+            MainLayout(navController, currentDestination) { innerPadding ->
+                ServicesScreen(
+                    modifier = Modifier.padding(innerPadding),
+                    /* DATOS DE PRUEBA UNICAMENTE !!!!!!!!! */
+                    servicios = listOf(
+                        Servicio(1, "Lavado completo", "Incluye lavado exterior e interior del vehículo", 15.0),
+                        Servicio(2, "Pulido de pintura", "Mejora el brillo de la pintura y elimina rayones leves", 25.0),
+                        Servicio(3, "Cambio de aceite", "Incluye cambio de aceite y filtro", 40.0)
+                    )
+                )
+            }
         }
     }
 }

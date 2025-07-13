@@ -14,7 +14,10 @@ import com.example.proyectofinalcarwash.home.HomeScreen
 import androidx.navigation.NavController
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier
+) {
     var selectedItem by remember { mutableStateOf(0) }
 
     Scaffold(
@@ -50,13 +53,11 @@ fun HomeScreen(navController: NavController) {
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
 
-            // 🧾 Bienvenida
             Text(
-                text = "Bienvenido, user",
+                text = "Bienvenido, user", /* nombre random de prueba */
                 style = MaterialTheme.typography.headlineSmall
             )
 
-            // 🔹 Próxima cita
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
@@ -72,7 +73,6 @@ fun HomeScreen(navController: NavController) {
                 }
             }
 
-            // 🔹 Acciones rápidas
             Text("Acciones rápidas", style = MaterialTheme.typography.titleMedium)
 
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
