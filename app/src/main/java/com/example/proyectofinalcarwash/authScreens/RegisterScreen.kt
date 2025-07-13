@@ -1,4 +1,5 @@
 package com.example.proyectofinalcarwash.authScreens
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -12,6 +13,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.painterResource
+import com.example.proyectofinalcarwash.R
 
 @Composable
 fun RegisterScreen(
@@ -39,10 +42,12 @@ fun RegisterScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "Legacy Carwash",
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(bottom = 32.dp)
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "Logo Legacy Carwash",
+                modifier = Modifier
+                    .height(240.dp)
+                    .padding(bottom = 32.dp)
             )
 
             OutlinedTextField(
