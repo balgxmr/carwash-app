@@ -86,6 +86,7 @@ fun AppNavigation() {
             MainLayout(navController, currentDestination) { innerPadding ->
                 ServicesScreen(
                     modifier = Modifier.padding(innerPadding),
+                    navController = navController
                 )
             }
 
@@ -208,10 +209,11 @@ fun AppNavigation() {
                 }
             )
         ) { backStackEntry ->
-            val promotionText = backStackEntry.arguments?.getString("promotionText") ?: ""
+            val encodedPromotion = backStackEntry.arguments?.getString("promotionText") ?: ""
+            val decodedPromotion = URLDecoder.decode(encodedPromotion, StandardCharsets.UTF_8.toString())
             PromotionScreen(
                 navController = navController,
-                promotionText = promotionText
+                promotionText = decodedPromotion
             )
         }
     }
