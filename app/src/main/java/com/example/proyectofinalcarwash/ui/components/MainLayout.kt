@@ -22,6 +22,7 @@ fun MainLayout(
     val bottomNavItems = listOf(
         BottomNavItem("Inicio", "home", Icons.Default.Home),
         BottomNavItem("Servicios", "services", Icons.Default.Build),
+        BottomNavItem("Vehículos", "vehicle", Icons.Default.DirectionsCar),
         BottomNavItem("Calendario", "calendar", Icons.Default.CalendarToday),
         BottomNavItem("Perfil", "profile", Icons.Default.Person)
     )

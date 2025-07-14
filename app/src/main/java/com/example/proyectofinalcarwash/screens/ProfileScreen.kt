@@ -77,7 +77,7 @@ fun ProfileScreen(
                     navController.navigate("historial")
                 }
                 SettingCard(icon = Icons.Default.Edit, label = "Editar Perfil") {
-                    // Acción para editar
+                    navController.navigate("editarPerfil")
                 }
                 SettingCard(icon = Icons.Default.Logout, label = "Cerrar Sesión") {
                     navController.navigate("login")

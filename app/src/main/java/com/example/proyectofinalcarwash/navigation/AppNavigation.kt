@@ -107,12 +107,16 @@ fun AppNavigation() {
             }
         }
 
-        composable("vehiculos") {
+        composable("editarPerfil") {
+            EditarPerfilScreen(navController = navController)
+        }
+
+        composable("vehicle") {
             val currentDestination = navController.currentBackStackEntryAsState().value?.destination
             MainLayout(navController, currentDestination) { innerPadding ->
                 MisVehiculosScreen(
-                    modifier = Modifier.padding(innerPadding),
-                    navController = navController
+                    navController = navController,
+                    modifier = Modifier.padding(innerPadding)
                 )
             }
         }
