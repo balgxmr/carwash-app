@@ -83,14 +83,29 @@ fun AppNavigation() {
             val serviciosViewModel: ServiciosViewModel = viewModel()
             val servicios = serviciosViewModel.servicios.collectAsState()
 
-            MainLayout(navController, currentDestination) { innerPadding ->
+            MainLayout(
+                navController = navController,
+                currentDestination = currentDestination,
+                floatingActionButton = {
+                    FloatingActionButton(
+                        onClick = { navController.navigate("agendarCita") },
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(80.dp)
+                    ) {
+                        Icon(
+                            Icons.Default.Add,
+                            contentDescription = "Agendar Cita",
+                            modifier = Modifier.size(36.dp)
+                        )
+                    }
+                }
+            ) { innerPadding ->
                 ServicesScreen(
                     modifier = Modifier.padding(innerPadding),
                     navController = navController
                 )
             }
 
-            // Lanzamos la carga si aún no está hecha
             LaunchedEffect(true) {
                 serviciosViewModel.fetchServicios()
             }

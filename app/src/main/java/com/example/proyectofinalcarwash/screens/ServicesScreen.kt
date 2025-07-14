@@ -31,90 +31,76 @@ fun ServicesScreen(
     val servicios by viewModel.servicios.collectAsState()
     val error by viewModel.error.collectAsState()
 
-    Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    navController.navigate("agendarCita")
-                }
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Agendar cita")
-            }
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-        ) {
-            Text(
-                text = "Servicios disponibles",
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(vertical = 16.dp)
-            )
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        Text(
+            text = "Servicios disponibles",
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.padding(vertical = 16.dp)
+        )
 
-            when {
-                error != null -> {
-                    Text(
-                        text = error ?: "Error desconocido",
-                        color = Color.Red,
-                        modifier = Modifier.padding(vertical = 8.dp)
-                    )
-                }
-                servicios.isEmpty() -> {
-                    Text(
-                        text = "No hay servicios disponibles",
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
-                }
-                else -> {
-                    LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        items(servicios) { servicio ->
-                            Card(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        // Codificar el texto de promoción para pasarlo por la ruta
-                                        val encodedPromotion = URLEncoder.encode(
-                                            "¡Promoción especial para ${servicio.nombre_servicio}!",
-                                            StandardCharsets.UTF_8.toString()
-                                        )
-                                        navController.navigate("promotion/$encodedPromotion")
-                                    },
-                                colors = CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.surfaceVariant
-                                )
-                            ) {
-                                Column(modifier = Modifier.padding(16.dp)) {
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Icon(
-                                            imageVector = Icons.Default.CleaningServices,
-                                            contentDescription = null,
-                                            modifier = Modifier.padding(end = 8.dp)
-                                        )
-                                        Text(
-                                            text = servicio.nombre_servicio,
-                                            fontSize = 18.sp,
-                                            fontWeight = FontWeight.SemiBold
-                                        )
-                                    }
-                                    Spacer(modifier = Modifier.height(4.dp))
-                                    Text(text = servicio.descripcion)
-                                    Spacer(modifier = Modifier.height(8.dp))
-                                    Text(
-                                        text = "Precio: $${servicio.precio}",
-                                        color = MaterialTheme.colorScheme.primary
+        when {
+            error != null -> {
+                Text(
+                    text = error ?: "Error desconocido",
+                    color = Color.Red,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+            }
+            servicios.isEmpty() -> {
+                Text(
+                    text = "No hay servicios disponibles",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+            }
+            else -> {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(servicios) { servicio ->
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    val encodedPromotion = URLEncoder.encode(
+                                        "¡Promoción especial para ${servicio.nombre_servicio}!",
+                                        StandardCharsets.UTF_8.toString()
                                     )
-                                    Spacer(modifier = Modifier.height(4.dp))
+                                    navController.navigate("promotion/$encodedPromotion")
+                                },
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant
+                            )
+                        ) {
+                            Column(modifier = Modifier.padding(16.dp)) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        imageVector = Icons.Default.CleaningServices,
+                                        contentDescription = null,
+                                        modifier = Modifier.padding(end = 8.dp)
+                                    )
                                     Text(
-                                        text = "Duración estimada: ${servicio.duracion_estimada} min",
-                                        style = MaterialTheme.typography.bodySmall
+                                        text = servicio.nombre_servicio,
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.SemiBold
                                     )
                                 }
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(text = servicio.descripcion)
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    text = "Precio: $${servicio.precio}",
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = "Duración estimada: ${servicio.duracion_estimada} min",
+                                    style = MaterialTheme.typography.bodySmall
+                                )
                             }
                         }
                     }
