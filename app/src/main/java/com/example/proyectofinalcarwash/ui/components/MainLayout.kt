@@ -17,6 +17,7 @@ data class BottomNavItem(val label: String, val route: String, val icon: ImageVe
 fun MainLayout(
     navController: NavController,
     currentDestination: NavDestination?,
+    floatingActionButton: (@Composable (() -> Unit))? = null,
     content: @Composable (PaddingValues) -> Unit
 ) {
     val bottomNavItems = listOf(
@@ -47,7 +48,8 @@ fun MainLayout(
                     )
                 }
             }
-        }
+        },
+        floatingActionButton = floatingActionButton ?: {},
     ) { innerPadding ->
         content(innerPadding)
     }
