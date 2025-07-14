@@ -1,7 +1,5 @@
 package com.example.proyectofinalcarwash.screens
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,46 +10,38 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-
-data class Vehiculo(
-    val id: Int,
-    val marca: String,
-    val modelo: String,
-    val placa: String
-)
+import com.example.proyectofinalcarwash.viewmodel.VehiculosViewModel
+import com.example.proyectofinalcarwash.data.model.Vehiculo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MisVehiculosScreen(
     navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: VehiculosViewModel = viewModel()
 ) {
-    // Lista de vehículos (puedes reemplazar con ViewModel)
-    //var vehiculos by remember { mutableStateOf(listOf<Vehiculo>()) }
+    val vehiculos = viewModel.vehiculos.collectAsState().value
+    val error = viewModel.error.collectAsState().value
 
-    // LISTA DE VEHICULOS TEMPORAL -- BORRAR !!!!!!!!!!!!!!!!!
-    var vehiculos by remember {
-        mutableStateOf(
-            listOf(
-                Vehiculo(
-                    id = 1,
-                    marca = "Toyota",
-                    modelo = "Corolla",
-                    placa = "ABC-123"
-                )
-            )
-        )
+    LaunchedEffect(Unit) {
+        viewModel.fetchVehiculos()
     }
 
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Mis Vehículos") })
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { navController.navigate("agregarVehiculo") },
+                containerColor = MaterialTheme.colorScheme.primary
+            ) {
+                Icon(Icons.Default.Add, contentDescription = "Agregar Vehículo")
+            }
         }
     ) { innerPadding ->
         LazyColumn(
@@ -61,24 +51,30 @@ fun MisVehiculosScreen(
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            if (error != null) {
+                item {
+                    Text("Error: $error", color = MaterialTheme.colorScheme.error)
+                }
+            }
+
             if (vehiculos.isEmpty()) {
                 item {
-                    AddVehicleCard(
-                        onClick = {
-                            navController.navigate("agregarVehiculo")
-                        }
-                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 64.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            "Aún no tienes vehículos registrados.",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             } else {
                 items(vehiculos) { vehiculo ->
                     VehiculoCard(vehiculo)
-                }
-                item {
-                    AddVehicleCard(
-                        onClick = {
-                            navController.navigate("agregarVehiculo")
-                        }
-                    )
                 }
             }
         }
@@ -88,8 +84,7 @@ fun MisVehiculosScreen(
 @Composable
 fun VehiculoCard(vehiculo: Vehiculo) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Row(
@@ -106,41 +101,6 @@ fun VehiculoCard(vehiculo: Vehiculo) {
             Column {
                 Text("${vehiculo.marca} ${vehiculo.modelo}", fontSize = 18.sp)
                 Text("Placa: ${vehiculo.placa}", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-        }
-    }
-}
-
-@Composable
-fun AddVehicleCard(
-    onClick: () -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(120.dp)
-            .clickable { onClick() },
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        shape = MaterialTheme.shapes.extraLarge
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Añadir vehículo",
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(32.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    "Añadir vehículo",
-                    fontSize = 18.sp,
-                    color = MaterialTheme.colorScheme.primary
-                )
             }
         }
     }

@@ -71,7 +71,7 @@ fun ProfileScreen(
 
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 SettingCard(icon = Icons.Default.DirectionsCar, label = "Mis Vehículos") {
-                    navController.navigate("vehiculos")
+                    navController.navigate("vehicle")
                 }
                 SettingCard(icon = Icons.Default.History, label = "Historial de Citas") {
                     navController.navigate("historial")
