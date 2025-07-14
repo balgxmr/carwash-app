@@ -77,9 +77,9 @@ fun MisVehiculosScreen(
 }
 
 @Composable
-fun VehiculoCard(vehiculo: Vehiculo) {
+fun VehiculoCard(vehiculo: Vehiculo, modifier: Modifier = Modifier) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Row(
@@ -100,3 +100,4 @@ fun VehiculoCard(vehiculo: Vehiculo) {
         }
     }
 }
+
