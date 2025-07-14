@@ -188,5 +188,9 @@ fun AppNavigation() {
         composable("agregarVehiculo") {
             AgregarVehiculoScreen(navController = navController)
         }
+
+        composable("historial") {
+            HistorialScreen(navController)
+        }
     }
 }
