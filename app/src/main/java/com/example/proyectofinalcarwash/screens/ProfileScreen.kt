@@ -2,7 +2,9 @@ package com.example.proyectofinalcarwash.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -33,7 +35,8 @@ fun ProfileScreen(
             modifier = modifier
                 .padding(innerPadding)
                 .padding(24.dp)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()), // 👈 para permitir scroll
             verticalArrangement = Arrangement.spacedBy(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -71,7 +74,7 @@ fun ProfileScreen(
 
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 SettingCard(icon = Icons.Default.DirectionsCar, label = "Mis Vehículos") {
-                    navController.navigate("vehicle")
+                    navController.navigate("vehiculos")
                 }
                 SettingCard(icon = Icons.Default.History, label = "Historial de Citas") {
                     navController.navigate("historial")
@@ -80,7 +83,9 @@ fun ProfileScreen(
                     navController.navigate("editarPerfil")
                 }
                 SettingCard(icon = Icons.Default.Logout, label = "Cerrar Sesión") {
-                    navController.navigate("login")
+                    navController.navigate("login") {
+                        popUpTo("home") { inclusive = true } // limpia la pila
+                    }
                 }
             }
         }
