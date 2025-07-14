@@ -130,7 +130,7 @@ fun HomeScreen(
                                 .width(260.dp)
                                 .height(120.dp)
                                 .clickable {
-                                    navController.navigate("promotion/${Uri.encode(promociones[index])}")
+                                    navController.navigate("promotion?text=${Uri.encode(promociones[index])}")
                                 },
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)
                         ) {

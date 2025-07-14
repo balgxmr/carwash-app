@@ -215,20 +215,18 @@ fun AppNavigation() {
         }
 
         composable(
-            "promotion/{promotionText}",
+            "promotion?text={promotionText}",
             arguments = listOf(
                 navArgument("promotionText") {
                     type = NavType.StringType
                     defaultValue = ""
-                    nullable = false
                 }
             )
         ) { backStackEntry ->
-            val encodedPromotion = backStackEntry.arguments?.getString("promotionText") ?: ""
-            val decodedPromotion = URLDecoder.decode(encodedPromotion, StandardCharsets.UTF_8.toString())
+            val promotionText = backStackEntry.arguments?.getString("promotionText") ?: ""
             PromotionScreen(
                 navController = navController,
-                promotionText = decodedPromotion
+                promotionText = promotionText
             )
         }
     }
