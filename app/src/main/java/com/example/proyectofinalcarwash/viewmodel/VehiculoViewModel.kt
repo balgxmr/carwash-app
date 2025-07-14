@@ -1,17 +1,16 @@
 package com.example.proyectofinalcarwash.viewmodel
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.proyectofinalcarwash.data.api.RetrofitClient
 import com.example.proyectofinalcarwash.data.model.Vehiculo
+import com.example.proyectofinalcarwash.data.model.VehiculoRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
-import com.example.proyectofinalcarwash.data.model.VehiculoRequest
 
 class VehiculosViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -28,9 +27,8 @@ class VehiculosViewModel(application: Application) : AndroidViewModel(applicatio
     fun fetchVehiculos() {
         viewModelScope.launch {
             try {
-                val token = getTokenFromPrefs()
                 val api = RetrofitClient.create(getApplication())
-                val response = api.getMisVehiculos("Bearer $token")
+                val response = api.getMisVehiculos()
 
                 if (response.isSuccessful) {
                     _vehiculos.value = response.body() ?: emptyList()
@@ -54,19 +52,23 @@ class VehiculosViewModel(application: Application) : AndroidViewModel(applicatio
     ) {
         viewModelScope.launch {
             try {
-                val token = getTokenFromPrefs()
                 val api = RetrofitClient.create(getApplication())
-                val response = api.crearVehiculo("Bearer $token", vehiculoRequest)
+                val response = api.crearVehiculo(vehiculoRequest)
 
-                if (response.isSuccessful) {
-                    fetchVehiculos() // actualizar lista
-                    onSuccess()
-                } else if (response.code() == 409) {
-                    onError("Ya existe un vehículo con esa placa")
-                } else if (response.code() == 401) {
-                    onError("Sesión expirada. Vuelve a iniciar sesión.")
-                } else {
-                    onError("Error del servidor: ${response.code()}")
+                when {
+                    response.isSuccessful -> {
+                        fetchVehiculos()
+                        onSuccess()
+                    }
+                    response.code() == 409 -> {
+                        onError("Ya existe un vehículo con esa placa")
+                    }
+                    response.code() == 401 -> {
+                        onError("Sesión expirada. Vuelve a iniciar sesión.")
+                    }
+                    else -> {
+                        onError("Error del servidor: ${response.code()}")
+                    }
                 }
             } catch (e: IOException) {
                 onError("No se pudo conectar al servidor")
@@ -74,10 +76,5 @@ class VehiculosViewModel(application: Application) : AndroidViewModel(applicatio
                 onError("Error: ${e.message}")
             }
         }
-    }
-
-    private fun getTokenFromPrefs(): String {
-        val prefs = getApplication<Application>().getSharedPreferences("auth", Context.MODE_PRIVATE)
-        return prefs.getString("token", "") ?: ""
     }
 }

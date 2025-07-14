@@ -30,10 +30,10 @@ fun ProfileScreen(
     val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
 
     // Cargar datos del cliente desde SharedPreferences
-    val nombre = prefs.getString("nombre", "Nombre no disponible") ?: ""
-    val email = prefs.getString("email", "Correo no disponible") ?: ""
-    val telefono = prefs.getString("telefono", "Teléfono no disponible") ?: ""
-    val residencia = prefs.getString("residencia", "Residencia no disponible") ?: ""
+    val nombre = prefs.getString("nombre", "") ?: ""
+    val email = prefs.getString("email", "") ?: ""
+    val telefono = prefs.getString("telefono", "") ?: ""
+    val residencia = prefs.getString("residencia", "") ?: ""
 
     Scaffold(
         topBar = {
@@ -94,8 +94,12 @@ fun ProfileScreen(
                     navController.navigate("editarPerfil")
                 }
                 SettingCard(icon = Icons.Default.Logout, label = "Cerrar Sesión") {
-                    // Limpiar SharedPreferences al cerrar sesión
-                    prefs.edit().clear().apply()
+                    context.getSharedPreferences("auth", Context.MODE_PRIVATE)
+                        .edit().clear().apply()
+
+                    context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                        .edit().clear().apply()
+
                     navController.navigate("login") {
                         popUpTo("home") { inclusive = true } // limpia la pila
                     }

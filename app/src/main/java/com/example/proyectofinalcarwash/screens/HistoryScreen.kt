@@ -16,28 +16,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import java.time.LocalDate
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.proyectofinalcarwash.viewmodel.CitasViewModel
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistorialScreen(
     navController: NavController,
+    viewModel: CitasViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
-    val hoy = LocalDate.now()
+    val citasState = viewModel.citas.collectAsState()
+    val errorState = viewModel.error.collectAsState()
 
-    // Citas de ejemplo
-    val citas = listOf(
-        Cita(hoy.minusDays(1), "08:00", 30, "Lavado interior", "Nissan Versa"),
-        Cita(hoy.minusDays(2), "15:00", 60, "Encerado", "Ford Focus"),
-        Cita(hoy.minusDays(3), "10:00", 45, "Cambio de aceite", "Toyota Corolla"),
-        Cita(hoy.minusDays(4), "11:30", 60, "Pulido de pintura", "Honda Civic"),
-        Cita(hoy.minusDays(2), "11:30", 60, "Pulido de pintura", "Kia K3"),
-        Cita(hoy.minusDays(5), "11:30", 60, "Pulido de pintura", "Acura RSX"),
-        Cita(hoy.minusDays(6), "11:30", 60, "Pulido de pintura", "Honda Accord")
-    )
+    val citas = citasState.value
+    val error = errorState.value
 
-    val citasPasadas = citas.sortedByDescending { it.fecha }
+    LaunchedEffect(Unit) {
+        viewModel.fetchCitas()
+    }
 
     Scaffold(
         topBar = {
@@ -45,23 +45,29 @@ fun HistorialScreen(
                 title = { Text("Historial de Citas") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Volver"
-                        )
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
                     }
                 }
             )
         }
     ) { paddingValues ->
-        if (citasPasadas.isEmpty()) {
+        if (error != null) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues),
                 contentAlignment = Alignment.Center
             ) {
-                Text("No hay citas anteriores.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Error: $error", color = MaterialTheme.colorScheme.error)
+            }
+        } else if (citas.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("No hay citas registradas.")
             }
         } else {
             LazyColumn(
@@ -71,43 +77,33 @@ fun HistorialScreen(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(citasPasadas) { cita ->
+                items(citas) { cita ->
+                    val colorEstado = when (cita.estado.lowercase()) {
+                        "pendiente" -> MaterialTheme.colorScheme.secondary
+                        "realizada" -> MaterialTheme.colorScheme.tertiary
+                        "cancelada" -> MaterialTheme.colorScheme.error
+                        else -> MaterialTheme.colorScheme.outline
+                    }
+
                     Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                navController.navigate(
-                                    "detalleCita/${cita.fecha}/${cita.hora}/${cita.servicio}/${cita.vehiculo}/${cita.duracionMin}"
-                                )
-                            },
+                        modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
                     ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text(
-                                text = "📅 ${cita.fecha}",
-                                fontWeight = FontWeight.SemiBold
+                        Column(Modifier.padding(16.dp)) {
+                            Text("📅 Fecha: ${cita.fecha_cita.take(10)}")
+                            Text("🕒 Hora: ${cita.hora_cita}")
+                            Text("🧽 Servicio: ${cita.nombre_servicio}")
+                            Text("🚗 Vehículo: ${cita.placa}")
+                            Text("🗨️ Comentario: ${cita.comentario_cliente}")
+                            Text("📌 Estado: ${cita.estado}",
+                                color = colorEstado,
+                                fontWeight = FontWeight.Bold
                             )
-                            Spacer(Modifier.height(4.dp))
-                            Text("🕒 ${cita.hora} — ${cita.duracionMin} min")
-                            Text("🧽 Servicio: ${cita.servicio}")
-                            Text("🚗 Vehículo: ${cita.vehiculo}")
                         }
-                    }
-                }
-
-                // Último ítem: Botón Volver
-                item {
-                    Spacer(Modifier.height(24.dp))
-                    Button(
-                        onClick = { navController.popBackStack() },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp)
-                    ) {
-                        Text("Volver")
                     }
                 }
             }
         }
     }
 }
+
