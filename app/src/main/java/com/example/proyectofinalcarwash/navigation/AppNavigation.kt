@@ -126,9 +126,23 @@ fun AppNavigation() {
             }
         }
 
-        composable("detalleCita") {
-            // Aquí luego creas tu pantalla de detalle
-            DetalleCitaScreen(navController = navController)
+        composable(
+            "detalleCita/{fecha}/{hora}/{servicio}/{vehiculo}/{duracionMin}"
+        ) { backStackEntry ->
+            val fecha = backStackEntry.arguments?.getString("fecha") ?: ""
+            val hora = backStackEntry.arguments?.getString("hora") ?: ""
+            val servicio = backStackEntry.arguments?.getString("servicio") ?: ""
+            val vehiculo = backStackEntry.arguments?.getString("vehiculo") ?: ""
+            val duracionMin = backStackEntry.arguments?.getString("duracionMin")?.toIntOrNull() ?: 0
+
+            DetalleCitaScreen(
+                navController = navController,
+                fechaStr = fecha,
+                hora = hora,
+                servicio = servicio,
+                vehiculo = vehiculo,
+                duracionMin = duracionMin
+            )
         }
 
         composable("profile") {

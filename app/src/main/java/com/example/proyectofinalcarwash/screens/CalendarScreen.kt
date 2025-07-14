@@ -40,11 +40,15 @@ fun CalendarScreen(
 ) {
     val hoy = LocalDate.now()
 
-    // Simulación de citas
+    // Citas de prueba
     val citas = listOf(
-        Cita(hoy.plusDays(1), "07:00", 45, "Lavado completo", "Toyota Corolla"),
-        Cita(hoy.plusDays(3), "08:40", 95, "Cambio de aceite", "Mazda 3"),
-        Cita(hoy.minusDays(2), "10:00", 60, "Pulido de pintura", "Honda Civic")
+        Cita(hoy.plusDays(0), "09:00", 30, "Lavado rápido", "Toyota Yaris"),
+        Cita(hoy.plusDays(0), "17:00", 45, "Lavado completo", "Honda Civic SI"),
+        Cita(hoy.plusDays(1), "10:00", 45, "Lavado completo", "Toyota Corolla"),
+        Cita(hoy.plusDays(2), "11:30", 60, "Cambio de aceite", "Mazda 3"),
+        Cita(hoy.plusDays(3), "13:00", 90, "Pulido de pintura", "Honda Civic"),
+        Cita(hoy.minusDays(1), "08:00", 30, "Lavado interior", "Nissan Versa"),
+        Cita(hoy.minusDays(2), "15:00", 60, "Encerado", "Ford Focus")
     )
 
     var diaSeleccionado by remember { mutableStateOf(hoy) }
@@ -136,7 +140,9 @@ fun CalendarScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    navController.navigate("detalleCita")
+                                    navController.navigate(
+                                        "detalleCita/${cita.fecha}/${cita.hora}/${cita.servicio}/${cita.vehiculo}/${cita.duracionMin}"
+                                    )
                                 },
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
                         ) {
@@ -150,23 +156,6 @@ fun CalendarScreen(
                     }
                 }
             }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DetalleCitaScreen(navController: NavController) {
-    Scaffold(
-        topBar = { TopAppBar(title = { Text("Detalle de Cita") }) }
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("Aquí irán los detalles de la cita.")
         }
     }
 }
