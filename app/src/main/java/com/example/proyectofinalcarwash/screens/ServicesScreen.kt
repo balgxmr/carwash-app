@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CleaningServices
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -66,11 +65,11 @@ fun ServicesScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    val encodedPromotion = URLEncoder.encode(
-                                        "¡Promoción especial para ${servicio.nombre_servicio}!",
+                                    val encodedNombre = URLEncoder.encode(
+                                        servicio.nombre_servicio,
                                         StandardCharsets.UTF_8.toString()
                                     )
-                                    navController.navigate("promotion/$encodedPromotion")
+                                    navController.navigate("promocionesServicio/${servicio.id_servicio}/$encodedNombre")
                                 },
                             colors = CardDefaults.cardColors(
                                 containerColor = MaterialTheme.colorScheme.surfaceVariant

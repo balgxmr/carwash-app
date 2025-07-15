@@ -95,7 +95,7 @@ fun ProfileScreen(
                 Divider()
                 Text("Configuración", style = MaterialTheme.typography.titleMedium)
                 SettingCard(icon = Icons.Default.DirectionsCar, label = "Mis Vehículos") {
-                    navController.navigate("misVehiculos")
+                    navController.navigate("vehicle")
                 }
                 SettingCard(icon = Icons.Default.History, label = "Historial de Citas") {
                     navController.navigate("historial")

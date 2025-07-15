@@ -28,6 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.example.proyectofinalcarwash.promotions.PromocionesPorServicioScreen
 import com.example.proyectofinalcarwash.promotions.PromotionScreen
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
@@ -85,20 +86,7 @@ fun AppNavigation() {
 
             MainLayout(
                 navController = navController,
-                currentDestination = currentDestination,
-                floatingActionButton = {
-                    FloatingActionButton(
-                        onClick = { navController.navigate("agendarCita") },
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(80.dp)
-                    ) {
-                        Icon(
-                            Icons.Default.Add,
-                            contentDescription = "Agendar Cita",
-                            modifier = Modifier.size(36.dp)
-                        )
-                    }
-                }
+                currentDestination = currentDestination
             ) { innerPadding ->
                 ServicesScreen(
                     modifier = Modifier.padding(innerPadding),
@@ -248,6 +236,43 @@ fun AppNavigation() {
                 navController = navController,
                 promotionText = promotionText
             )
+        }
+
+        composable(
+            route = "promocionesServicio/{idServicio}/{nombreServicio}",
+            arguments = listOf(
+                navArgument("idServicio") { type = NavType.IntType },
+                navArgument("nombreServicio") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val idServicio = backStackEntry.arguments?.getInt("idServicio") ?: 0
+            val nombreServicioEncoded = backStackEntry.arguments?.getString("nombreServicio") ?: ""
+            val nombreServicio = URLDecoder.decode(nombreServicioEncoded, StandardCharsets.UTF_8.toString())
+            val currentDestination = navController.currentBackStackEntryAsState().value?.destination
+
+            MainLayout(
+                navController = navController,
+                currentDestination = currentDestination,
+                floatingActionButton = {
+                    FloatingActionButton(
+                        onClick = { navController.navigate("agendarCita") },
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(80.dp)
+                    ) {
+                        Icon(
+                            Icons.Default.Add,
+                            contentDescription = "Agendar Cita",
+                            modifier = Modifier.size(36.dp)
+                        )
+                    }
+                }
+            ) { innerPadding ->
+                PromocionesPorServicioScreen(
+                    navController = navController,
+                    idServicio = idServicio,
+                    nombreServicio = nombreServicio
+                )
+            }
         }
     }
 }
